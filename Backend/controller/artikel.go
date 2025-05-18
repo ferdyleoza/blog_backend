@@ -84,13 +84,8 @@ func UpdateArtikelByID(ctx context.Context, id string, data model.Artikel) error
 func DeleteArtikelByID(ctx context.Context, id string) error {
 	collection := config.DB.Collection("artikels")
 
-	objID, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return fmt.Errorf("ID tidak valid: %v", err)
-	}
-
-	filter := bson.M{"_id": objID}
-	_, err = collection.DeleteOne(ctx, filter)
+	filter := bson.M{"_id": id}
+	_, err := collection.DeleteOne(ctx, filter)
 	if err != nil {
 		return err
 	}
