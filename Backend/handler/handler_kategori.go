@@ -6,6 +6,7 @@ import (
 	"fmt"
 
 	"github.com/gofiber/fiber/v2"
+	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func GetAllKategoris(c *fiber.Ctx) error {
@@ -22,7 +23,6 @@ func GetAllKategoris(c *fiber.Ctx) error {
 		"data":    kategoris,
 	})
 }
-
 func CreateKategori(c *fiber.Ctx) error {
 	var kategori model.Kategori
 
@@ -32,6 +32,9 @@ func CreateKategori(c *fiber.Ctx) error {
 			"error":   err.Error(),
 		})
 	}
+
+	// Generate ID string
+	kategori.ID = primitive.NewObjectID().Hex()
 
 	if err := controller.CreateKategori(&kategori); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
@@ -45,6 +48,7 @@ func CreateKategori(c *fiber.Ctx) error {
 		"data":    kategori,
 	})
 }
+
 
 func GetKategoriByID(c *fiber.Ctx) error {
 	id := c.Params("id")
